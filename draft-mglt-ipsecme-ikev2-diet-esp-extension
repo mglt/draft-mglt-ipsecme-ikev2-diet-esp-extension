@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Edited by John Mattsson for use with xml2rfc -->
+
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" []>
+
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+
+<?rfc strict="yes" ?>
+<?rfc toc="yes" ?>
+<?rfc tocdepth="3" ?>
+<?rfc symrefs="yes" ?>
+<?rfc sortrefs="yes" ?>
+<?rfc compact="yes" ?>
+<?rfc subcompact="no" ?>
+<?rfc iprnotified="no" ?>
+
+
+<rfc category="std" docName="draft-mglt-ipsecme-ikev2-diet-esp-extension-00" ipr="trust200902">
+
+    <front>
+        <title abbrev="ESP IKEv2">Internet Key Exchange version 2 (IKEv2) extension for the ESP Header Compression (EHC) Strategy </title>
+
+        <author fullname="Daniel Migault" initials="D." surname="Migault">
+            <organization>Ericsson</organization>
+            <address>
+                <postal>
+                    <street>8275 Trans Canada Route</street>
+                    <city>Saint-Laurent, QC H4S</city>
+                    <country>Canada</country>
+                </postal>
+                <facsimile/>
+                <email>daniel.migault@ericsson.com</email>
+                <uri/>
+            </address>
+        </author>
+        <author fullname="Tobias Guggemos" initials="T." surname="Guggemos">
+            <organization>LMU Munich</organization>
+            <address>
+                <postal>
+                    <street>Oettingenstr. 67</street>
+                    <city>80538 Munich</city>
+                    <country>Germany</country>
+                </postal>
+                <!--<phone>+33 1 45 29 60 52</phone>-->
+                <facsimile/>
+                <email>guggemos@mnm-team.org</email>
+                <uri>www.mnm-team.org/~guggemos</uri>
+            </address>
+        </author>
+        <date/>
+        <area>INTERNET</area>
+
+        <workgroup>ipsecme</workgroup>
+
+<abstract> 
+	
+<t>ESP Header Compression (EHC) reduces the ESP overhead by compressing
+ESP fields. Compression results from a coordination of various EHC
+Rules designed as EHC Strategies. An EHC Strategy may require to be
+configured with some configuration parameters.</t>
+
+<t>When a Security Association (SA) is enabling EHC, the two peers need to agree
+which EHC Strategy is applied as well as its associated
+configuration parameters.</t>
+
+<t>This document describes an extension of IKEv2 that enables two peers
+to agree on a specific EHC Strategy as well as its associated
+configuration parameters.</t> 
+
+</abstract>
+
+</front>
+
+<middle>
+
+<section title="Requirements notation">
+            
+<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in <xref
+target="RFC2119"/>.</t>
+
+</section>
+
+<section title="Terminology">
+        
+<t>This section defines terms and acronyms used in this document.
+            
+<list hangIndent="6" style="hanging">
+                
+<t hangText="- EHC Strategy : "> EHC Strategy is a
+generic term defined in <xref target="I-D.mglt-ipsecme-diet-esp"/> that
+defines the way EHC Rules are coordinated.</t>
+                
+<t hangText="- Designated EHC Strategy: "> the specific EHC Strategy
+agreed between the two peers. <xref target="I-D.mglt-ipsecme-diet-esp"/>
+defines Diet-ESP as an EHC Strategy and other may be defined in the
+future. This document only considers Diet-ESP but provides negotiation
+mechanisms so future EHC Strategies may also be negotiated. New EHC
+Strategies will require to register the necessary associated EHC
+Strategy Configuration Parameters.  This will typically include a
+specific designation as well as specific configuration parameters. The
+parameters are designated as EHC Strategy Configuration Parameter
+(Parameter)</t>
+                
+<t hangText="- EHC Strategy Configuration Parameter (Parameter): ">
+describes the configuration parameters associated to a specific EHC
+Strategy. The Parameters includes the EHC Strategy as well as
+configuration parameters.</t>
+                
+<t hangText="- EHC Strategy Configuration Parameter Attributes
+(Attribute): "> designates the necessary attributes associated to each
+Parameter exchanged in order to agree on the EHC Strategy Configuration
+Parameter. This document considers two type of attributes: the Range
+Attribute that indicates a range for a given Parameter, and the Value
+Attribute that indicates a fixed value associated to a Parameter.</t>
+
+<t hangText="- Range Attribute: "> the payload that indicates a
+supported range of values on an specific EHC Strategy Configuration
+Parameter. In this document, all Parameters are associated a specific
+Range Attribute.</t>
+              
+<t hangText="- Value Attribute:"> the payload that indicates a value of
+an specific EHC Strategy Configuration Parameter. In this document, all
+Parameters are associated a specific Value Payload.</t> 
+            
+</list></t>
+        
+</section>
+        
+<section title="Introduction">
+
+<t>ESP Header Compression (EHC) <xref
+target="I-D.mglt-ipsecme-diet-esp"/> reduces the ESP overhead by
+compressing ESP fields. Compression results from a coordination of
+various EHC Rules performed by the EHC Strategy. The EHC Strategy may
+require to be configured with some configuration parameters designated
+as EHC Strategy Configuration Parameter (or simply Parameter). </t>
+
+<t>When a Security Association (SA) is enabling EHC the two peers needs to agree
+which EHC Strategy strategy is applied as well as its associated
+configuration parameters.</t>
+
+<t>This document describes an extension of IKEv2 that enables two peers
+to agree on a specific EHC Strategy as well as its associated
+Parameters. </t>
+
+</section>
+
+<section title="Protocol Overview">
+
+<t>EHC Strategies are configured on a per-SA basis and need to be agreed
+between the two peers. An EHC Strategy is agreed when peers have agreed
+on the EHC Strategy as well as its associated Parameters.</t>
+
+<t>For example,  <xref target="I-D.mglt-ipsecme-diet-esp"/> defines an
+EHC Strategy called as Diet-ESP which requires the following
+Parameters to be set: udplite_coverage, tcp_lsb, tcp_options,
+tcp_urgent, esp_sn_lsb, esp_spi_lsb, esp_align.</t>
+  
+<t>The negotiation of the EHC Strategy as well as its
+Parameters is performed via the EHC_STRATEGY_SUPPORTED Notify Payload
+exchange.</t>
+
+<t>When the initiator is willing to negotiate an EHC Strategy for a
+given SA, it sends a single EHC_STRATEGY_SUPPORTED Notify Payload in its
+IKE_AUTH and CREATE_CHILD_SA exchange. This Notify Payload indicates the
+support to negotiate EHC Strategies. In addition, the Notify Payload MAY
+indicates with a Range Attribute, the supported values for each
+Parameter, including the Designated EHC Strategy. If the initiator does
+not have any restriction regarding a specific Parameter, there is no
+need to provide an Range Value associated to that Parameter.  </t>
+
+<t>Currently, the only defined EHC Strategy is Diet-ESP, and the
+EHC_STRATEGY_SUPPORTED Notify Payload indicates the support for Diet-ESP
+unless Diet-ESP is explicitly excluded by the Range Attribute. In the
+future, when other EHC Strategies will be defined, the support of that
+new Designated EHC Strategy will need to be explicitly announced with
+its associated Range Attribute. Other Parameters MAY also have their own
+associated Range Attribute. Note that if multiple EHC Strategies that
+share a given Parameter, the Range Attribute is applied for all
+designated EHC Strategies. In other words, it is not possible to have a
+given Parameter associated with different values depending on the EHC
+Strategy.</t>
+
+<t>Upon receiving the IKE_AUTH and CREATE_CHILD_SA with a
+EHC_STRATEGY_SUPPORTED Notify Payload, a receiver that does not support
+this extension or that is not willing to activate EHC ignores the Notify
+Payload and the negotiation continues as a standard ESP negotiation. If
+the responder supports EHC Strategy negotiation and chooses to apply a
+supported EHC Strategy to the negotiated SA, it reads all Range
+Attributes and selects a Designated EHC Strategy as well as specific
+values for each Parameter associated to the Designated EHC Strategy.
+The responder enables EHC for the negotiated SA and responds with an
+EHC_STRATEGY_SUPPORTED Notify Payload which indicates the selected
+Parameters' values using Value Attributes. The responder MAY send a
+Value Attribute that corresponds to all selected Parameters. On the
+other hand, the responder MAY also send only the Value Attribute of
+Parameters whose value differs from the default value. In fact each EHC
+Strategy defines default values for each Parameters.</t>
+
+<t>In some cases, the supported values provided by the initiator may not
+match those of the responder, and so EHC cannot be activated. The
+responder may want to indicate the supported range provided by the
+initiator were not acceptable by responding with a
+EHC_STRATEGY_UNACCEPTABLE_PARAMETER. The initiator MAY carry Range
+Attributes in order to indicates what it supports. </t>
+
+<t>Upon receiving a EHC_STRATEGY_SUPPORTED Notify Payload back, the
+initiator reads the Value Attributes and checks the Parameters match the
+supported range. The initiator may configure the EHC Strategy with the
+provided parameters or abort the negotiation with a Delete Payload as
+specified in section 3.11 of <xref target="RFC7296"/>.</t>
+
+<t>Upon receiving a EHC_STRATEGY_UNACCEPTABLE_PARAMETER Notify Payload,
+the initiator may use the regular ESP or delete the SA. When the SA is
+deleted, the initiator is expected to restart a negotiation providing
+contraints that respect those of the responder.</t>  
+
+
+             <figure title="Protocol Overview">
+                 <artwork><![CDATA[
+Initiator                         Responder
+-------------------------------------------------------------------
+HDR, SA, KEi, Ni -->
+                             <-- HDR, SA, KEr, Nr
+HDR, SK {IDi, AUTH,
+     SA, TSi, TSr,
+     N(EHC_STRATEGY_SUPPORTED)} -->
+                             <-- HDR, SK {IDr, AUTH,
+                                      SA, TSi, TSr,
+                                      N(EHC_STRATEGY_SUPPORTED)}
+                 ]]></artwork>
+             </figure>
+
+</section>
+
+<section title="Notify Payload">
+
+
+<t><xref target="fig-notify-payload"/> illustrates the Notify Payload
+packet format as described in section 3.10 of <xref target="RFC7296"/>,
+used for both EHC_STRATEGY_SUPPORTED and EHC_STRATEGY_UNACCEPTABLE_PARAMETER
+Notify Payloads.</t>
+ 
+<t>Both EHC_STRATEGY_SUPPORTED and EHC_STRATEGY_UNACCEPTABLE_PARAMETER Notify
+Payloads are used during the IKE_AUTH and CREATE_CHILD_SA. The sender is
+expected to send only a single payload. When multiple payloads are
+received, the receiver MAY consider the first one and MUST ignore the
+remaining ones.</t>
+
+             <figure title="Notify Payload" anchor="fig-notify-payload">
+                 <artwork><![CDATA[
+                         1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  | Next Payload  |C|  RESERVED   |         Payload Length        |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  Protocol ID  |   SPI Size    |      Notify Message Type      |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                 ]]></artwork>
+             </figure>
+
+<t>The fields Next Payload, Critical Bit, RESERVED, and Payload Length
+are defined in <xref target="RFC7296"/>.  Specific fields defined in this
+document are:
+
+        <list style="hanging" hangIndent="6">
+                <t hangText="- Protocol ID (1 octet):"> set to zero.</t>
+                <t hangText="- SPI Size (1 octet):"> set to zero.</t>
+		<t hangText="- Notify Message Type (2 octets):">
+Specifies the type of notification message. It is set to &lt;TBA1 by
+IANA&gt; for the EHC_STRATEGY_SUPPORTED and &lt;TBA2 by IANA&gt;.for
+EHC_STRATEGY_UNACCEPTABLE_PARAMETER.</t>
+        </list></t>
+
+<section title="EHC_STRATEGY_SUPPORTED Notify Payload">
+
+<t>The EHC_STRATEGY_SUPPORTED Notify Payload indicates the supported EHC
+Strategies.</t>
+
+<t>When sent by the initiator, it MAY contain Range Attributes (see
+<xref target="sec-range-attribute"/>). A responder not
+understanding a Range Attribute MUST ignore it. This is intended to ease
+the negotiation of new EHC Strategies with new Parameters.  It is its
+responsibility to understand the Parameters associated to the negotiated
+EHC Strategy.</t>
+
+<t>When sent by the responder, it MAY contain Value Attributes (see
+<xref target="sec-value-attribute"/>). An initiator not understanding a
+Value Payload MUST NOT create the SA and SHOULD send a Delete Payload to
+the responder  as described in section 3.11 of <xref
+target="RFC7296"/>.</t>  
+
+</section>
+
+<section title="EHC_STRATEGY_UNACCEPTABLE_PARAMETER Notify Payload">
+
+<t>The EHC_STRATEGY_UNACCEPTABLE_PARAMETER Notify Payload indicates the
+responder supports of EHC Strategy negotiation but was not able to
+configure it due to the constraints provided by the initiator. The
+responder MAY insert Range Attributes (see <xref
+target="sec-range-attribute"/>) to inform the initiator of its
+supported ranges.</t>
+
+<t>The responder has configured the SA without enabling the EHC. Upon
+receiving the Notify Payload, the initiator MAY accept the SA without
+EHC. It MAY also Delete the SA as described in section 3.11 of <xref
+target="RFC7296"/> and renegotiate the SA, considering the responder's
+supported ranges.</t>
+
+
+</section>
+
+</section>
+
+<section title="EHC Strategy Configuration Parameters">
+
+<t>This document only considers Diet-ESP, which requires the following
+Parameters to be agreed by the two peers: esp_align, esp_spi_lsb,
+esp_spi_sn, tcp_urgent, tcp_options, tcp_lsb, udplite_coverage. In
+addition, in order to enable future EHC Strategies, the following
+parameter has been introduce to designate the agreed EHC Strategy:
+ehc_strategy. <xref target="fig-param-values"/> lists these Parameters
+with description and associated values.</t>          
+
+<t>In addition, each of these parameter is associated to a default
+value. The default value is considered unless other values are specified
+by the responder. The associated default value is specified in <xref
+target="fig-param-values"/>.</t>
+
+<figure title="Parameter Values" anchor="fig-param-values">
+                 <artwork><![CDATA[
+Parameter        Value    Description                   Default   
+---------------------------------------------------------------
+ehc_strategy     0        Diet-ESP                          *
+                 1-127    Unassigned         
+                 128-255  Private Used
+esp_align        0        8 bit alignment                   *
+                 1        16 bit alignment
+                 2        32 bit alignment
+                 3-255    Unassigned
+esp_spi_lsb      0        0 bit length SPI                  *
+                 1        8 bit length SPI  
+                 2        16 bit length SPI  
+                 3        24 bit length SPI  
+                 4        24 bit length SPI  
+                 5-255    Unassigned
+esp_spi_sn       0        0 bit length SPI                  *
+                 1        8 bit length SN  
+                 2        16 bit length SN  
+                 3        24 bit length SN  
+                 4        24 bit length SN
+                 5-255    Unassigned
+tcp_urgent       0        Urgent pointer field compressed 
+                 1        Urgent pointer field uncompressed *
+                 2-255    Unassigned
+tcp_options      0        TCP option field compressed
+                 1        TCP option field uncompressed     *
+                 2-255    Unassigned
+tcp_lsb          0        0 bit length SN   
+                 1        8 bit length SN  
+                 2        16 bit length SN  
+                 3        24 bit length SN  
+                 4        24 bit length SN  
+                 5-255    Unassigned
+udplite_coverage 0        Coverage is UDP Length
+                 8-65535  Coverage 8 (the UDP-Lite Header)
+                 1-7      Unassigned
+                 ]]></artwork>
+             </figure>
+
+</section>
+
+<section title="EHC Strategy Configuration Parameter Attributes">
+
+<t>For each of these Parameters, the initiator or responder may indicate
+acceptable values of these Parameters. Such constraints are expressed
+with the Range Attributes. Each Parameters has its corresponding payload
+which carries the minimum and maximum acceptable values associated to
+the parameters (see <xref target="sec-range-attribute"/>).</t>
+
+<t>Similarly, for each of these Parameters, the responder needs to be
+able to provide the selected value associated to the Parameter. Each of
+these Parameters' value can be expressed by via the Value Attribute.
+Each parameter has a corresponding payload which carries the associated
+value (see <xref target="sec-value-attribute"/>).</t>
+
+<t>The Range Attribute and Value Attribute use the format of the
+Transform Attribute of section 3.3.5 of <xref target="RFC7296"/>
+represented in <xref target="fig-attributes-payload"/>.  The fields are
+described in <xref target="RFC7296"/>.</t>
+
+             <figure title="Parameter Attributes" anchor="fig-attributes-payload">
+                 <artwork><![CDATA[
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |A|       Attribute Type        |    AF=0  Attribute Length     |
+   |F|                             |    AF=1  Attribute Value      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                   AF=0  Attribute Data                        |
+   |                   AF=1  Not Transmitted                       |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                 ]]></artwork>
+             </figure>
+
+<t>The document considers only the TLV format so AF = 0 with the
+Parameter Types defined in <xref target="fig-att-type"/> and
+acceptable and default Parameter's Values are defined in <xref
+target="fig-param-values"/>.</t>
+  
+             <figure title="Attribute Type" anchor="fig-att-type">
+                 <artwork><![CDATA[
+Attribute Type                      Value   Associated Parameter
+---------------------------------------------------------------- 
+EHC Designated Strategy Range        0       ehc_strategy          
+ESP Alignment Range                  1       esp_align
+ESP LSB SPI Range                    2       esp_spi_lsb    
+ESP LSB SN Range                     3       esp_spi_sn
+TCP Urgent Range                     4       tcp_urgent
+TCP Options Range                    5       tcp_options 
+TCP LSB Range                        6       tcp_lsb 
+UDP-Lite Coverage Range              7       udplite_coverage           
+Unassigned                          8-63     
+EHC Designated Strategy Value       64      ehc_strategy      
+ESP Alignment Value                 65      esp_align
+ESP LSB SPI Value                   66      esp_spi_lsb
+ESP LSB SN Value                    67      esp_spi_sn
+TCP Urgent Value                    68      tcp_urgent
+TCP Options Value                   69      tcp_options
+TCP LSB Value                       70      tcp_lsb
+UDP-Lite Coverage Value             71      udplite_coverage
+Unassigned                          72-99 
+Private Use                         100-127           
+                 ]]></artwork>
+             </figure>
+
+
+
+<section title="Range Attribute" anchor="sec-range-attribute">
+
+<t>The Parameter's value of ehc_strategy, esp_align, esp_spi_lsb, esp_sn_lsb,
+tcp_urgent, tcp_options, tcp_lsb and udplite_coverage is coded on 1 byte, so the
+Attribute Data of the Range Attribute is 2 byte long and the Attribute Length is
+set to 4. The first byte indicates the minimal acceptable value, while the
+second byte indicates the maximal value.</t>
+
+<t>Similarly, udplight_coverage is coded on 2 bytes, so the Attribute Data of
+the Range Attribute is 4 byte long, and Attribute Length is set to 6.</t>
+
+</section>
+
+<section title="Value Attribute" anchor="sec-value-attribute">
+
+<t>The Parameters ehc_strategy, esp_align, esp_spi_lsb, esp_sn_lsb, tcp_urgent,
+tcp_options and tcp_lsb the Attribute Data is codes on 1 byte, and Attribute
+Length is set to 3.</t>
+
+<t>Similarly, udplight_coverage is coded on 2 bytes, so the Attribute Data of
+the Value Attribute is 2 byte long and the Attribute Length is set to 4.</t>
+
+</section>
+
+</section>
+
+<section title="IANA Considerations">
+
+<t>IANA is requested to allocate two values in the IKEv2 Notify Message
+Types - Status Types registry:</t>
+
+        <figure>
+                 <artwork><![CDATA[
+IKEv2 Notify Message Types - Status Types
+-----------------------------------------
+EHC_STRATEGY_SUPPORTED               TBA1
+EHC_STRATEGY_UNACCEPTABLE_PARAMETER  TBA2
+                 ]]></artwork>
+            </figure>
+
+             <figure title="Attribute Type">
+                 <artwork><![CDATA[
+Attribute Type                      Value   
+-------------------------------------------- 
+EHC Designated Strategy Range 0            
+ESP Alignment Range           1       
+ESP LSB SPI Range             2       
+ESP LSB SN Range              3       
+TCP Urgent Range              4       
+TCP Options Range             5       
+TCP LSB Range                 6       
+UDP-Lite Coverage Range       7                 
+Unassigned                          8-42
+Private Use                         43-63    
+EHC Designated Strategy Value       64       
+ESP Alignment Value                 65      
+ESP LSB SPI Value                   66      
+ESP LSB SN Value                    67      
+TCP Urgent Value                    68      
+TCP Options Value                   69      
+TCP LSB Value                       70      
+UDP-Lite Coverage Value             71      
+Unassigned                          72-116 
+Private Use                         117-127           
+                 ]]></artwork>
+             </figure>
+
+        </section>
+
+        <section anchor="sec-security-considerations" title="Security Considerations">
+        </section>
+
+    </middle>
+ 
+    <back>
+        <references title="Normative References">
+<?rfc include="reference.RFC.2119.xml"?>
+<?rfc include="reference.RFC.7296.xml"?>
+<?rfc include="reference.I-D.mglt-ipsecme-diet-esp"?>
+       </references>
+
+        <references title="Informational References">
+                   <reference anchor="fit-iot-lab" target="https://www.iot-lab.info">
+            <front>
+                <title>Future Internet of Things (FIT) IoT-LAB</title>
+                <author/>
+                <date/>
+            </front>
+        </reference>
+       </references>
+
+    </back>
+</rfc>
+
