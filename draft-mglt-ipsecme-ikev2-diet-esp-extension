@@ -47,6 +47,19 @@
                 <uri>www.mnm-team.org/~guggemos</uri>
             </address>
         </author>
+        <author initials='D.' surname='Schinazi' fullname='David Schinazi'>
+            <organization>Apple Inc.</organization>
+            <address>
+                <postal>
+                    <street>One Apple Park Way</street>
+                    <city>Cupertino</city>
+                    <region>California</region>
+                    <code>95014</code>
+                    <country>USA</country>
+                </postal>
+                <email>dschinazi@apple.com</email>
+            </address>
+        </author>
         <date/>
         <area>INTERNET</area>
 
