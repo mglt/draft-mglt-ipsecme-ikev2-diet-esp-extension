@@ -42,8 +42,21 @@
                     <country>Germany</country>
                 </postal>
                 <facsimile/>
-                <email>guggemos@mnm-team.org</email>
-                <uri>www.mnm-team.org/~guggemos</uri>
+                <email>guggemos@nm.ifi.lmu.de</email>
+                <uri>www.nm.ifi.lmu.de/~guggemos</uri>
+            </address>
+        </author>
+        <author initials='D.' surname='Schinazi' fullname='David Schinazi'>
+            <organization>Apple Inc.</organization>
+            <address>
+                <postal>
+                    <street>One Apple Park Way</street>
+                    <city>Cupertino</city>
+                    <region>California</region>
+                    <code>95014</code>
+                    <country>USA</country>
+                </postal>
+                <email>dschinazi@apple.com</email>
             </address>
         </author>
         <date/>
@@ -148,6 +161,22 @@ Parameters. </t>
 
 <section title="Protocol Overview">
 
+<t>ESP Header Compression requires IKEv2 to negotiate the IPsec mode and
+  the used EHC strategy and its corresponding parameters.</t>
+
+<t>First, the peers need to agree to the IPsec mode used for compression.
+<xref target="I-D.mglt-ipsecme-diet-esp"/> defines "Compressed Transport Mode"
+and "Compressed Tunnel Mode". This is done by a new Notify Payload USE_COMPRESSED_MODE.
+In order to negotiate "Compressed Transport Mode", the initiator sends the
+USE_COMPRESSED_MODE Notify Payload and USE_TRANSPORT_MODE Notify Payload which is
+defined in <xref target="RFC7296"/>. In order to negotiate "Compressed Tunnel Mode"
+the initiator sends the USE_COMPRESSED_MODE Notify Payload. Tunnel mode is
+the default behaviour defined in <xref target="RFC7296"/>, why it does not need
+any further negotiation. The protocol behaviour of USE_COMPRESSED_MODE is
+the same as the one of USE_TRANSPORT_MODE, the initiator sends the
+USE_COMPRESSED_MODE Notify Payload and the responder responds with
+USE_COMPRESSED_MODE Notfiy Payload.</t>
+
 <t>EHC Strategies are configured on a per-SA basis and need to be agreed
 between the two peers. An EHC Strategy is agreed when peers have agreed
 on the EHC Strategy as well as its associated Parameters.</t>
@@ -225,10 +254,12 @@ HDR, SA, KEi, Ni -->
                              <-- HDR, SA, KEr, Nr
 HDR, SK {IDi, AUTH,
      SA, TSi, TSr,
-     N(EHC_STRATEGY_SUPPORTED)} -->
+     N(EHC_STRATEGY_SUPPORTED)
+     N(USE_COMPRESSED_MODE)} -->
                              <-- HDR, SK {IDr, AUTH,
                                       SA, TSi, TSr,
-                                      N(EHC_STRATEGY_SUPPORTED)}
+                                      N(EHC_STRATEGY_SUPPORTED)
+                                      N(USE_COMPRESSED_MODE)}
                  ]]></artwork>
              </figure>
 
@@ -239,10 +270,13 @@ HDR, SK {IDi, AUTH,
 
 <t><xref target="fig-notify-payload"/> illustrates the Notify Payload
 packet format as described in section 3.10 of <xref target="RFC7296"/>,
-used for both EHC_STRATEGY_SUPPORTED and EHC_STRATEGY_UNACCEPTABLE_PARAMETER
+used for USE_COMPRESSED_MODE, EHC_STRATEGY_SUPPORTED and EHC_STRATEGY_UNACCEPTABLE_PARAMETER
 Notify Payloads.</t>
- 
-<t>Both EHC_STRATEGY_SUPPORTED and EHC_STRATEGY_UNACCEPTABLE_PARAMETER Notify
+
+<t>The USE_COMPRESSED_MODE Notify Payload is used during the IKE_AUTH and CREATE_CHILD_SA.
+</t>
+
+<t>Similarly, EHC_STRATEGY_SUPPORTED and EHC_STRATEGY_UNACCEPTABLE_PARAMETER Notify
 Payloads are used during the IKE_AUTH and CREATE_CHILD_SA. The sender is
 expected to send only a single payload. When multiple payloads are
 received, the receiver MAY consider the first one and MUST ignore the
@@ -264,14 +298,27 @@ remaining ones.</t>
 are defined in <xref target="RFC7296"/>.  Specific fields defined in this
 document are:
 
-        <list style="hanging" hangIndent="6">
+    <list style="hanging" hangIndent="6">
                 <t hangText="- Protocol ID (1 octet):"> set to zero.</t>
                 <t hangText="- SPI Size (1 octet):"> set to zero.</t>
 		<t hangText="- Notify Message Type (2 octets):">
-Specifies the type of notification message. It is set to &lt;TBA1 by
-IANA&gt; for the EHC_STRATEGY_SUPPORTED and &lt;TBA2 by IANA&gt;.for
-EHC_STRATEGY_UNACCEPTABLE_PARAMETER.</t>
-        </list></t>
+      Specifies the type of notification message. It is set to:
+      <list style="hanging">
+        <t>&lt;TBA1 by IANA&gt; for the USE_COMPRESSED_MODE</t>
+        <t>&lt;TBA2 by IANA&gt; for the EHC_STRATEGY_SUPPORTED</t>
+        <t>&lt;TBA3 by IANA&gt; for EHC_STRATEGY_UNACCEPTABLE_PARAMETER</t>
+      </list></t>
+    </list></t>
+
+<section title="USE_COMPRESSED_MODE Notify Payload">
+<t>The USE_COMPRESSED_MODE Notify Payload indicates that an SA with either
+"Compressed Transport Mode" or "Compressed Tunnel Mode" should be set up.</t>
+
+<t>A responder not understanding USE_COMPRESSED_MODE Notify Payload MUST
+ignore it and any other Notify Payload defined in this document
+as it may otherwise result in unexpected behaviour during the communication
+if the negotiated SA is not in correct IPsec Mode.</t>
+</section>
 
 <section title="EHC_STRATEGY_SUPPORTED Notify Payload">
 
@@ -472,8 +519,9 @@ Types - Status Types registry:</t>
                  <artwork><![CDATA[
 IKEv2 Notify Message Types - Status Types
 -----------------------------------------
-EHC_STRATEGY_SUPPORTED               TBA1
-EHC_STRATEGY_UNACCEPTABLE_PARAMETER  TBA2
+USE_COMPRESSED_MODE                  TBA1
+EHC_STRATEGY_SUPPORTED               TBA2
+EHC_STRATEGY_UNACCEPTABLE_PARAMETER  TBA3
                  ]]></artwork>
             </figure>
 
@@ -518,9 +566,9 @@ Private Use                         117-127
 <?rfc include="reference.I-D.mglt-ipsecme-diet-esp"?>
        </references>
 
-<!--
         <references title="Informational References">
-                   <reference anchor="fit-iot-lab" target="https://www.iot-lab.info">
+
+        <reference anchor="fit-iot-lab" target="https://www.iot-lab.info">
             <front>
                 <title>Future Internet of Things (FIT) IoT-LAB</title>
                 <author/>
@@ -529,7 +577,6 @@ Private Use                         117-127
         </reference>
 
        </references>
--->
 
     </back>
 </rfc>
