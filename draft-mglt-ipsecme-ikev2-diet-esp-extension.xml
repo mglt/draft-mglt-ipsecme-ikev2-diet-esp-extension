@@ -335,7 +335,7 @@ supported ranges.</t>
 
 <t>This document only considers Diet-ESP, which requires the following
 Parameters to be agreed by the two peers: esp_align, esp_spi_lsb,
-esp_spi_sn, tcp_urgent, tcp_options, tcp_lsb, udplite_coverage. In
+esp_sn_lsb, tcp_urgent, tcp_options, tcp_lsb, udplite_coverage. In
 addition, in order to enable future EHC Strategies, the following
 parameter has been introduce to designate the agreed EHC Strategy:
 ehc_strategy. <xref target="fig-param-values"/> lists these Parameters
@@ -363,7 +363,7 @@ esp_spi_lsb      0        0 bit length SPI                  *
                  3        24 bit length SPI  
                  4        32 bit length SPI  
                  5-255    Unassigned
-esp_spi_sn       0        0 bit length SPI                  *
+esp_sn_lsb       0        0 bit length SN                  *
                  1        8 bit length SN  
                  2        16 bit length SN  
                  3        24 bit length SN  
@@ -434,7 +434,7 @@ Attribute Type                      Value   Associated Parameter
 EHC Designated Strategy Range        0       ehc_strategy          
 ESP Alignment Range                  1       esp_align
 ESP LSB SPI Range                    2       esp_spi_lsb    
-ESP LSB SN Range                     3       esp_spi_sn
+ESP LSB SN Range                     3       esp_sn_lsb
 TCP Urgent Range                     4       tcp_urgent
 TCP Options Range                    5       tcp_options 
 TCP LSB Range                        6       tcp_lsb 
@@ -443,7 +443,7 @@ Unassigned                          8-63
 EHC Designated Strategy Value       64      ehc_strategy      
 ESP Alignment Value                 65      esp_align
 ESP LSB SPI Value                   66      esp_spi_lsb
-ESP LSB SN Value                    67      esp_spi_sn
+ESP LSB SN Value                    67      esp_sn_lsb
 TCP Urgent Value                    68      tcp_urgent
 TCP Options Value                   69      tcp_options
 TCP LSB Value                       70      tcp_lsb
