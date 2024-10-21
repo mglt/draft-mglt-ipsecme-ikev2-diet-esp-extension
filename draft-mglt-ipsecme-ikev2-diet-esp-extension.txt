@@ -5,15 +5,15 @@
 IPsecme                                                       D. Migault
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                             T. Guggemos
-Expires: 23 December 2023                                            LMU
+Expires: 19 September 2024                                           LMU
                                                              D. Schinazi
                                                               Google LLC
-                                                            21 June 2023
+                                                           18 March 2024
 
 
   Internet Key Exchange version 2 (IKEv2) extension for the ESP Header
                            Compression (EHC)
-              draft-mglt-ipsecme-ikev2-diet-esp-extension
+             draft-mglt-ipsecme-ikev2-diet-esp-extension-04
 
 Abstract
 
@@ -36,11 +36,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 December 2023.
+   This Internet-Draft will expire on 19 September 2024.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2024 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Migault, et al.         Expires 23 December 2023                [Page 1]
+Migault, et al.         Expires 19 September 2024               [Page 1]
 
-Internet-Draft                EHC extension                    June 2023
+Internet-Draft                EHC extension                   March 2024
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Migault, et al.         Expires 23 December 2023                [Page 2]
+Migault, et al.         Expires 19 September 2024               [Page 2]
 
-Internet-Draft                EHC extension                    June 2023
+Internet-Draft                EHC extension                   March 2024
 
 
    multiple ECH Context to be defined and enable the initiator that
@@ -165,9 +165,9 @@ Internet-Draft                EHC extension                    June 2023
 
 
 
-Migault, et al.         Expires 23 December 2023                [Page 3]
+Migault, et al.         Expires 19 September 2024               [Page 3]
 
-Internet-Draft                EHC extension                    June 2023
+Internet-Draft                EHC extension                   March 2024
 
 
     Initiator                         Responder
@@ -221,9 +221,9 @@ Internet-Draft                EHC extension                    June 2023
 
 
 
-Migault, et al.         Expires 23 December 2023                [Page 4]
+Migault, et al.         Expires 19 September 2024               [Page 4]
 
-Internet-Draft                EHC extension                    June 2023
+Internet-Draft                EHC extension                   March 2024
 
 
 4.  EHC_SUPPORTED and EHC_UNACCEPTABLE_PARAMETER Notify Payload
@@ -277,9 +277,9 @@ Internet-Draft                EHC extension                    June 2023
 
 
 
-Migault, et al.         Expires 23 December 2023                [Page 5]
+Migault, et al.         Expires 19 September 2024               [Page 5]
 
-Internet-Draft                EHC extension                    June 2023
+Internet-Draft                EHC extension                   March 2024
 
 
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -333,9 +333,9 @@ Internet-Draft                EHC extension                    June 2023
 
 
 
-Migault, et al.         Expires 23 December 2023                [Page 6]
+Migault, et al.         Expires 19 September 2024               [Page 6]
 
-Internet-Draft                EHC extension                    June 2023
+Internet-Draft                EHC extension                   March 2024
 
 
    The alignment, esp_spi_lsb, esp_sn_lsb and ts_flow_label have a
@@ -389,17 +389,17 @@ Internet-Draft                EHC extension                    June 2023
 
 
 
-Migault, et al.         Expires 23 December 2023                [Page 7]
+Migault, et al.         Expires 19 September 2024               [Page 7]
 
-Internet-Draft                EHC extension                    June 2023
+Internet-Draft                EHC extension                   March 2024
 
 
    [I-D.mglt-ipsecme-diet-esp]
               Migault, D., Guggemos, T., Bormann, C., and D. Schinazi,
-              "ESP Header Compression and Diet-ESP", Work in Progress,
-              Internet-Draft, draft-mglt-ipsecme-diet-esp-08, 13 May
-              2022, <https://datatracker.ietf.org/doc/html/draft-mglt-
-              ipsecme-diet-esp-08>.
+              "ESP Header Compression Profile", Work in Progress,
+              Internet-Draft, draft-mglt-ipsecme-diet-esp-11, 18 March
+              2024, <https://datatracker.ietf.org/api/v1/doc/document/
+              draft-mglt-ipsecme-diet-esp/>.
 
 Authors' Addresses
 
@@ -445,4 +445,4 @@ Authors' Addresses
 
 
 
-Migault, et al.         Expires 23 December 2023                [Page 8]
+Migault, et al.         Expires 19 September 2024               [Page 8]
