@@ -13,6 +13,9 @@ Expires: 24 April 2025                                               LMU
                                                                   D. Liu
                                                                 S. Preda
                                                                 Ericsson
+                                                               M. Hatami
+                                                             S. Céspedes
+                                                    Concordia University
                                                          21 October 2024
 
 
@@ -44,10 +47,7 @@ Status of This Memo
 
    This Internet-Draft will expire on 24 April 2025.
 
-Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
-   document authors.  All rights reserved.
 
 
 
@@ -57,6 +57,11 @@ Migault, et al.           Expires 24 April 2025                 [Page 1]
 
 Internet-Draft                EHC extension                 October 2024
 
+
+Copyright Notice
+
+   Copyright (c) 2024 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents (https://trustee.ietf.org/
@@ -98,11 +103,6 @@ Table of Contents
    "OPTIONAL" in this document are to be interpreted as described in
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
-
-
-
-
-
 
 
 
@@ -580,14 +580,14 @@ Internet-Draft                EHC extension                 October 2024
    Email: stere.preda@ericsson.com
 
 
+   Maryam Hatami
+   Concordia University
+   Email: maryam.hatami@mail.concordia.ca
 
 
-
-
-
-
-
-
+   Sandra Céspedes
+   Concordia University
+   Email: sandra.cespedes@concordia.ca
 
 
 
