@@ -58,7 +58,10 @@ author:
 
 
 
---- abstract
+---
+
+[![hackmd-github-sync-badge](https://hackmd.io/P414llRtRz-0KYOHCh9Qfw/badge)](https://hackmd.io/P414llRtRz-0KYOHCh9Qfw)
+ abstract
 
 This document describes an IKEv2 extension for Header Compression to agree on Attributes for Rules Generation. 
 This extension defines the necessary registries for the ESP Header Compression Profile (EHCP) Diet-ESP. 
