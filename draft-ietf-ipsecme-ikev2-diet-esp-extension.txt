@@ -5,7 +5,7 @@
 IPsecme                                                       D. Migault
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                             T. Guggemos
-Expires: 25 May 2025                                                 LMU
+Expires: 25 July 2025                                                LMU
                                                              D. Schinazi
                                                               Google LLC
                                                                W. Atwood
@@ -16,7 +16,7 @@ Expires: 25 May 2025                                                 LMU
                                                                M. Hatami
                                                              S. Céspedes
                                                     Concordia University
-                                                        21 November 2024
+                                                         21 January 2025
 
 
 Internet Key Exchange version 2 (IKEv2) extension for Header Compression
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 May 2025.
+   This Internet-Draft will expire on 25 July 2025.
 
 
 
@@ -53,14 +53,14 @@ Status of This Memo
 
 
 
-Migault, et al.            Expires 25 May 2025                  [Page 1]
+Migault, et al.           Expires 25 July 2025                  [Page 1]
 
-Internet-Draft                EHC extension                November 2024
+Internet-Draft                EHC extension                 January 2025
 
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -77,24 +77,25 @@ Table of Contents
    1.  Requirements notation . . . . . . . . . . . . . . . . . . . .   2
    2.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
    3.  Protocol Overview . . . . . . . . . . . . . . . . . . . . . .   3
-   4.  HCP_SUPPORTED and HCP_UNSUPPORTED Notify Payloads . . . . . .   4
-   5.  Attributes for Rules Generation . . . . . . . . . . . . . . .   6
-   6.  Registering a Header Compression Profile  . . . . . . . . . .   6
-   7.  Registration of Diet-ESP EHCP . . . . . . . . . . . . . . . .   6
-   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
-     8.1.  Registration of IKEv2 Notify Message Types  . . . . . . .   8
+   4.  HCP_PROPOSAL Notify Payload . . . . . . . . . . . . . . . . .   4
+   5.  Attributes for Rules Generation . . . . . . . . . . . . . . .   5
+     5.1.  Generic Attributes  . . . . . . . . . . . . . . . . . . .   6
+   6.  Registering a Header Compression Profile  . . . . . . . . . .   7
+   7.  AfRG for the Diet-ESP HCP . . . . . . . . . . . . . . . . . .   7
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
+     8.1.  Registration of IKEv2 Notify Message Types  . . . . . . .   9
      8.2.  Registry for Generic Attributes for Rules Generation  . .   9
-     8.3.  Registry for IKEv2 Header Compression Profile . . . . . .   9
-     8.4.  Registry for Diet-ESP Attributes for Rules Generation . .   9
+     8.3.  Registry for IKEv2 Header Compression Profile . . . . . .  10
+     8.4.  Registry for Diet-ESP Attributes for Rules Generation . .  10
      8.5.  Registries for the Values of Diet-ESP Attributes for Rules
-           Generation  . . . . . . . . . . . . . . . . . . . . . . .  10
-       8.5.1.  DSCP CDA Value Registry . . . . . . . . . . . . . . .  10
-       8.5.2.  ECN CDA Value Registry  . . . . . . . . . . . . . . .  11
-       8.5.3.  Flow Label CDA Value Registry . . . . . . . . . . . .  11
-       8.5.4.  OS or Network Byte Alignment  . . . . . . . . . . . .  11
-   9.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
-   10. Normative References  . . . . . . . . . . . . . . . . . . . .  12
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  12
+           Generation  . . . . . . . . . . . . . . . . . . . . . . .  11
+       8.5.1.  DSCP CDA Value Registry . . . . . . . . . . . . . . .  11
+       8.5.2.  ECN CDA Value Registry  . . . . . . . . . . . . . . .  12
+       8.5.3.  Flow Label CDA Value Registry . . . . . . . . . . . .  12
+       8.5.4.  OS or Network Byte Alignment  . . . . . . . . . . . .  12
+   9.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
+   10. Normative References  . . . . . . . . . . . . . . . . . . . .  13
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
 
 1.  Requirements notation
 
@@ -108,10 +109,9 @@ Table of Contents
 
 
 
-
-Migault, et al.            Expires 25 May 2025                  [Page 2]
+Migault, et al.           Expires 25 July 2025                  [Page 2]
 
-Internet-Draft                EHC extension                November 2024
+Internet-Draft                EHC extension                 January 2025
 
 
 2.  Introduction
@@ -129,9 +129,9 @@ Internet-Draft                EHC extension                November 2024
 
    As illustrated in Figure 1, an initiator intending to utilize the
    Header Compression Profile (HCP) informs its peer by sending a
-   HCP_SUPPORTED Notify Payload during the IKE_AUTH and CREATE_CHILD_SA
-   exchanges.  The HCP_SUPPORTED includes a list of Proposal payloads,
-   each comprising an EHCP Name along with a set of Attributes for Rules
+   HCP_PROPOSAL Notify Payload during the IKE_AUTH and CREATE_CHILD_SA
+   exchanges.  The HCP_PROPOSAL includes a list of Proposals, each
+   comprising an EHCP Name along with a set of Attributes for Rules
    Generation (AfRG)[I-D.ietf-ipsecme-diet-esp].  Any AfRG for which the
    initiator wishes to specify no limitations SHOULD be excluded, i.e.,
    an AfRG is only sent if the sending peer wants the receiving peer to
@@ -143,16 +143,14 @@ Internet-Draft                EHC extension                November 2024
    If a Proposal contains an unknown HCP Name, or any AfRG in a Proposal
    is unknown, then the entire Proposal must be discarded by the
    responder.  If none of the received Proposals are deemed acceptable,
-   the responder MAY choose to discard the HCP_SUPPORTED Notify Payload.
+   the responder MAY choose to discard the HCP_PROPOSAL Notify Payload.
    Nevertheless, it is anticipated that the responder will provide an
    explanation for rejecting all HCP Proposals.  If the reason pertains
    to an AfRG with an unacceptable value, the responder SHOULD reply
-   with an HCP_UNSUPPORTED Notify Payload.  This Notify Payload SHOULD
-   include one or more acceptable Proposal Payloads to guide the
-   initiator.
+   with a NO_PROPOSAL_CHOSEN Notify Payload.
 
    Conversely, if the receiver identifies a suitable Proposal, it will
-   respond with an HCP_SUPPORTED Notify Payload that includes the chosen
+   respond with an HCP_PROPOSAL Notify Payload that includes the chosen
    Proposal.  In cases where the AfRG was not explicitly stated, the
    responder will provide the AfRG unless it defaults to a standard
    value.  Each AfRG MUST NOT be mentioned more than one time.  When
@@ -161,21 +159,21 @@ Internet-Draft                EHC extension                November 2024
    responder MUST NOT provide more than one value.  The Proposal MUST
    NOT contain any range of AfRG.
 
+   Upon receipt of an NO_PROPOSAL_CHOSEN Notify Payload, the initiator
+   has the option to restart the CREATE_CHILD_SA exchange.
 
 
 
 
-Migault, et al.            Expires 25 May 2025                  [Page 3]
+Migault, et al.           Expires 25 July 2025                  [Page 3]
 
-Internet-Draft                EHC extension                November 2024
+Internet-Draft                EHC extension                 January 2025
 
 
-   Upon receipt of an HCP_UNSUPPORTED Notify Payload, the initiator has
-   the option to restart the CREATE_CHILD_SA exchange.
-
-   When the initiator receives the HCP_SUPPORTED Notify Payload, it will
-   evaluate the Proposal to ensure that it aligns with the initial
-   proposal and adheres to its policies prior to executing the HCP.
+   When the initiator receives the HCP_PROPOSAL_CHOSEN Notify Payload,
+   it will evaluate the Proposal to ensure that it aligns with the
+   initial proposal and adheres to its policies prior to executing the
+   HCP.
 
 Initiator                         Responder
 -------------------------------------------------------------------
@@ -183,7 +181,7 @@ HDR, SA, KEi, Ni -->
                            <-- HDR, SA, KEr, Nr
 HDR, SK {IDi, AUTH,
      SA, TSi, TSr,
-     N(HCP_SUPPORTED
+     N(HCP_PROPOSAL
          Proposal_ID=1, HCP Name="Diet-ESP"
            AfRG_a
            ...
@@ -195,7 +193,7 @@ HDR, SK {IDi, AUTH,
            AfRG_j)
                            <-- HDR, SK {IDr, AUTH,
                                     SA, TSi, TSr,
-                                    N(HCP_SUPPORTED
+                                    N(HCP_PROPOSAL
                                       Proposal_ID=2, HCP Name="Diet-ESP"
                                         AfRG_a
                                         ...
@@ -205,34 +203,28 @@ HDR, SK {IDi, AUTH,
                                         AfRG_u)
 
      Figure 1: The parameters for Diet-ESP have been established
-  through the HCP_SUPPORTED Notify exchange.  In this instance, the
-   responder has opted for the second Proposal, which includes the
-    specified Attributes for Rules Generation (AfRG).  Any absent
-            AfRG will default to its predetermined values.
+      through the HCP_PROPOSAL_CHOSEN Notify exchange.  In this
+   instance, the responder has opted for the second Proposal, which
+    includes the specified Attributes for Rules Generation (AfRG).
+      Any absent AfRG will default to its predetermined values.
 
-4.  HCP_SUPPORTED and HCP_UNSUPPORTED Notify Payloads
+4.  HCP_PROPOSAL Notify Payload
 
-   Figure 2 describes the HCP_SUPPORTED and HCP_UNSUPPORTED Notify
-   Payload.
+   Figure 2 describes the HCP_PROPOSAL Notify Payload.
 
-
-
-
-
-
-
-Migault, et al.            Expires 25 May 2025                  [Page 4]
-
-Internet-Draft                EHC extension                November 2024
-
-
-                            1                   2                   3
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      | Next Payload  |C|  RESERVED   |         Payload Length        |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      |  Protocol ID  |   SPI Size    |      Notify Message Type      |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+
+Migault, et al.           Expires 25 July 2025                  [Page 4]
+
+Internet-Draft                EHC extension                 January 2025
+
 
                           Figure 2: Notify Payload
 
@@ -244,12 +236,11 @@ Internet-Draft                EHC extension                November 2024
    SPI Size (1 octet):  set to zero.
 
    Notify Message Type (2 octets):  Specifies the type of notification
-      message.  It is set to TBA1 for HCP_SUPPORTED and TBA2 for
-      HCP_UNSUPPORTED
+      message.  It is set to TBA1 for HCP_PROPOSAL_CHOSEN.
 
-   When sent by the Initiator, the HCP_SUPPORTED Notify Payload contains
-   a list of Proposal payloads described in Figure 3.  When sent by the
-   responder the HCP_SUPPORTED Notify Payload contains a single Payload
+   When sent by the Initiator, the HCP_PROPOSAL Notify Payload contains
+   a list of Proposals described in Figure 3.  When sent by the
+   responder the HCP_PROPOSAL Notify Payload contains a single Payload
    described in Figure 3.
 
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -261,11 +252,11 @@ Internet-Draft                EHC extension                November 2024
      |                                                               |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                         Figure 3: Proposal Payload
+                             Figure 3: Proposal
 
    Proposal ID (1 octet):  The number identifying the Proposal.
 
-   EHCP Name (2 octets):  The identifier of the EHCP Name. (see Table 2)
+   EHCP Name (1 octet):  The identifier of the EHCP Name. (see Table 2)
 
    Proposal Length (2 octets):  The length in octets of the Proposal
       Data
@@ -274,19 +265,22 @@ Internet-Draft                EHC extension                November 2024
       represented via Transform Attribute format [RFC7296],
       Section 3.3.5 and detailed further as described in Section 5.
 
-
-
-
-Migault, et al.            Expires 25 May 2025                  [Page 5]
-
-Internet-Draft                EHC extension                November 2024
-
-
 5.  Attributes for Rules Generation
 
    Attributes for Rules Generation (AfRG) follow the same format as the
    Transform Attribute [RFC7296], Section 3.3.5 copied for convenience
    in Figure 4.
+
+
+
+
+
+
+
+Migault, et al.           Expires 25 July 2025                  [Page 5]
+
+Internet-Draft                EHC extension                 January 2025
+
 
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -299,8 +293,12 @@ Internet-Draft                EHC extension                November 2024
 
                    Figure 4: Transform Attribute Payload
 
-   There are two types of AfRG: 1) AfRG that are specific to a given HCP
-   and 2) generic AfRG.
+   There exist two categories of attributes: 1) generic attributes,
+   which are applicable across all HCPs and serve to enhance the
+   representation of a combination of AfRGs, and 2) AfRGs that are
+   tailored to a particular HCP and possess a distinct value.
+
+5.1.  Generic Attributes
 
    This specification defines range_afrg_proposal as a Generic Attribute
    for Rules Generation to specify that a given AfRG can be selected
@@ -308,35 +306,64 @@ Internet-Draft                EHC extension                November 2024
 
    *  Designation: range_afrg_proposal
 
-   *  Has Associated Data: YES (AF=0)
+   *  Attribute Format: 0
 
    *  Attribute Data: Let AfRG_min and AfRG_max be the minimum and
       maximum values of the proposed range, expressed following the
       Transform Attribute Payload format.  The corresponding Attribute
       Data is the concatenation of AfRG_min and AfRG_max.
 
+   To avoid ambiguity, it is explicitly required that both AfRG_min and
+   AfRG_max refer to the same type of parameter and that they are
+   processed as attributes with values defining the minimum and maximum
+   of the range.  This ensures consistent interpretation during
+   negotiation and compression.
+
+   The figure below illustrates a Proposal for a compressed SPI between
+   6 and 8 bit long.  SPI are compressed by sending LSB, so in our case
+   AfRG_min is an esp_spi_lsb AfRG set to 6 and AfRG_max is a
+   esp_spi_lsb set to 8.  The esp_spi_lsb AfRG is detailled in the Diet-
+   ESP EHCP Section 7 and is a 2 byte length Attribute.  The resulting
+   range proposal i sexpressed via the combination of the
+   range_afrg_proposal and AfRG_min and AfRG_max.
+
+
+
+
+
+
+
+Migault, et al.           Expires 25 July 2025                  [Page 6]
+
+Internet-Draft                EHC extension                 January 2025
+
+
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |0|       afrg_range_proposal    | Attribute Length = 4 octets  |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |1|           esp_spi_lsb        | Attribute Value = 6          |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |1|           esp_spi_lsb        | Attribute Value = 8          |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+        Figure 5: Illustration of the use of the range_afrg_proposal
+                       defining a range of SPI length
+
 6.  Registering a Header Compression Profile
 
    An HCP needs to register an HCP Name taken from Table 2 in
    Section 8.3, the specification that describes the operations of the
    EHCP, as well as the different AfRG.  For each AfRG, the
-   corresponding Attribute Type, the AF value, the Attribute Data and
-   the Default Value MUST be specified.
+   corresponding Attribute Type, the AF value, the Attribute Data or
+   Attribute Value and the Default Value MUST be specified.
 
-7.  Registration of Diet-ESP EHCP
+7.  AfRG for the Diet-ESP HCP
 
    This section defines the code points that are needed to agree on the
    AfRG between two IKEv2 peers as described in Section 6.
 
    *  HCP Name: "Diet-ESP" as specified in Table 2, Section 8.3.
-
-
-
-
-Migault, et al.            Expires 25 May 2025                  [Page 6]
-
-Internet-Draft                EHC extension                November 2024
-
 
    *  Specification : [I-D.ietf-ipsecme-diet-esp]
 
@@ -346,10 +373,11 @@ Internet-Draft                EHC extension                November 2024
 
    *  Designation: dscp_cda
 
-   *  Has Associated Data: YES (AF=0)
+   *  Attribute Format: 1
 
-   *  Attribute Data: DSCP CDA takes discrete values coded over one byte
-      as described in DSCP CDA Value Registry (Table 4 in Section 8.5.1)
+   *  Attribute Value: DSCP CDA takes discrete values coded over one
+      byte as described in DSCP CDA Value Registry (Table 4 in
+      Section 8.5.1)
 
    *  Default Value: the default value is set to "uncompress"
 
@@ -357,9 +385,16 @@ Internet-Draft                EHC extension                November 2024
 
    *  Designation: ecn_cda
 
-   *  Has Associated Data: YES (AF=0)
+   *  Attribute Format: 1
 
-   *  Attribute Data: ECN CDA takes discrete values coded over one byte
+
+
+Migault, et al.           Expires 25 July 2025                  [Page 7]
+
+Internet-Draft                EHC extension                 January 2025
+
+
+   *  Attribute Value: ECN CDA takes discrete values coded over one byte
       as described in the ECN CDA Value Registry (Table 5 in
       Section 8.5.2)
 
@@ -369,9 +404,9 @@ Internet-Draft                EHC extension                November 2024
 
    *  Designation: flow_label_cda
 
-   *  Has Associated Data: YES (AF=0)
+   *  Attribute Format: 1
 
-   *  Attribute Data: Flow Label CDA takes discrete values coded over
+   *  Attribute Value: Flow Label CDA takes discrete values coded over
       one byte as described in the Flow Label CDA Value Registry
       (Table 6 in Section 8.5.3)
 
@@ -381,41 +416,47 @@ Internet-Draft                EHC extension                November 2024
 
    *  Designation: alignment
 
-   *  Has Associated Data: YES (AF=0)
+   *  Attribute Format: 1
 
-   *  Attribute Data: Byte Alignment takes discrete values coded over
+   *  Attribute Value: Byte Alignment takes discrete values coded over
       one byte as described in the Bit Alignment Value Registry (Table 7
       in Section 8.5.4)
 
+   *  Default Value: the default value is set to "64 bit", which
+      corresponds to the standard IPv6 bit alignment.  The default value
+      of 64 bit in this specification refers to the bit alignment used
+      for Diet-ESP compression operations and does not override or
+      contradict the alignment requirements of RFC 4303.  Instead, the
+      alignment specified here ensures compatibility with the SCHC
+      compression framework, which is designed to operate efficiently in
+      constrained networks.
 
-
-Migault, et al.            Expires 25 May 2025                  [Page 7]
-
-Internet-Draft                EHC extension                November 2024
-
-
-   *  Default Value: the default value is set to "32 bit", which
-      corresponds to the standard IPv6 bit alignment
-
-   Security Policy Index (SPI) Least Significant Bits (LSB)
+   Security Parameter Index (SPI) Least Significant Bits (LSB)
 
    *  Designation: esp_spi_lsb
 
-   *  Has Associated Data: YES (AF=0)
+   *  Attribute Format: 1
 
-   *  Attribute Data: SPI LSB designates the number of bits that are
+   *  Attribute Value: SPI LSB designates the number of bits that are
       provided to infer the SPI.  This number is between 0 and 32.
 
    *  Default Value: the default value is 32, which is the size of the
       standard SPI in the standard ESP
 
+
+
+Migault, et al.           Expires 25 July 2025                  [Page 8]
+
+Internet-Draft                EHC extension                 January 2025
+
+
    Sequence Number (SN) Least Significant Bits (LSB)
 
    *  Designation: esp_sn_lsb
 
-   *  Has Associated Data: YES (AF=0)
+   *  Attribute Format: 1
 
-   *  Attribute Data: SN LSB designates the number of bits that are
+   *  Attribute Value: SN LSB designates the number of bits that are
       provided to infer the SPI.  This number is between 0 and 32.
 
    *  Default Value: the default value is 32, which is the size of the
@@ -430,25 +471,23 @@ Internet-Draft                EHC extension                November 2024
 
      Value    Notify Messages - Status Types
    -----------------------------------------
-     TBA1    HCP_SUPPORTED
-     TBA2    HCP_UNSUPPORTED
+     TBA1    HCP_PROPOSAL
 
-   This specification requests the IANA to create an IKEv2 Header
-   Compression registry (see Section 8.3), as well as the necessary
+   This specification requests the IANA to create a Header Compression
+   Profile registry (see Section 8.3), as well as the necessary
    registries for the ESP Header Compression Profile Diet-ESP, that is
    the Attribute for Rules Generations (see Section 8.4) as well as,
    when required, the complementary specific AfRG Values associated with
    each AfRG (see Section 8.5).
 
+   Note that the term "Header Compression Profile" reflects the purpose
+   of the registry, which is to define profiles for ESP header
+   compression using the Diet-ESP methodology.  While the registry is
+   managed and utilized exclusively by IKEv2 for negotiating compression
+   parameters, its scope is limited to ESP header compression and does
+   not extend to IKEv2 itself.
+
    All registries are "Specification Required".
-
-
-
-
-Migault, et al.            Expires 25 May 2025                  [Page 8]
-
-Internet-Draft                EHC extension                November 2024
-
 
 8.2.  Registry for Generic Attributes for Rules Generation
 
@@ -458,15 +497,29 @@ Internet-Draft                EHC extension                November 2024
    The AfRG Code Point mentioned here MUST NOT be reused by any
    Registries associated with any Profile and is shared by all profiles.
 
-     +===========+=======+=============+================+===========+
-     | AfRG Code | Full  | Designation | Has Associated | Reference |
-     | Point     | Name  |             | Data           |           |
-     +===========+=======+=============+================+===========+
-     | 65535     | RANGE | range_afrg  | YES            | ThisRFC   |
-     |           | AfRG  |             |                |           |
-     +-----------+-------+-------------+----------------+-----------+
 
-                                 Table 1
+
+
+
+Migault, et al.           Expires 25 July 2025                  [Page 9]
+
+Internet-Draft                EHC extension                 January 2025
+
+
+    +===========+=======+=====================+===========+===========+
+    | AfRG Code | Full  | Designation         | Attribute | Reference |
+    | Point     | Name  |                     | Format    |           |
+    +===========+=======+=====================+===========+===========+
+    | 65535     | RANGE | range_afrg_proposal | 0         | ThisRFC   |
+    |           | AfRG  |                     |           |           |
+    +-----------+-------+---------------------+-----------+-----------+
+
+                                  Table 1
+
+   Each entry in the range is represented by two attributes (AfRG_min
+   and AfRG_max), both following the 2-byte Attribute Type format
+   specified in [RFC7296].  This ensures clarity and compatibility in
+   all implementations.
 
 8.3.  Registry for IKEv2 Header Compression Profile
 
@@ -487,6 +540,13 @@ Internet-Draft                EHC extension                November 2024
    the AF bit of the corresponding Transform Attribute Payload is set to
    0; otherwise it is set to 1.
 
+   The Diet-ESP Attributes for Rules Generation registry specifies six
+   AfRG parameters explicitly defined for Diet-ESP that are not part of
+   the standard IKEv2 negotiation process.  These attributes are
+   required for implementing the Diet-ESP Header Compression Profile.
+   The remaining attributes referenced in [RFC7296], [RFC4301], and
+   related drafts (e.g., DSCP values) are already defined and negotiated
+   during the creation of the CHILD SA.
 
 
 
@@ -497,38 +557,33 @@ Internet-Draft                EHC extension                November 2024
 
 
 
-
-
-
-
-Migault, et al.            Expires 25 May 2025                  [Page 9]
+Migault, et al.           Expires 25 July 2025                 [Page 10]
 
-Internet-Draft                EHC extension                November 2024
+Internet-Draft                EHC extension                 January 2025
 
 
-   +===========+=============+================+============+===========+
-   | AfRG      | Full Name   | Designation    | Has        | Reference |
-   | Code      |             |                | Associated |           |
-   | Point     |             |                | Data       |           |
-   +===========+=============+================+============+===========+
-   | 0         | DSCP CDA    | dscp_cda       | YES        | ThisRFC   |
-   +-----------+-------------+----------------+------------+-----------+
-   | 1         | ECN CDA     | ecn_cda        | YES        | ThisRFC   |
-   +-----------+-------------+----------------+------------+-----------+
-   | 2         | Flow Label  | flow_label_cda | YES        | ThisRFC   |
-   |           | CDA         |                |            |           |
-   +-----------+-------------+----------------+------------+-----------+
-   | 3         | Alignment   | alignment      | YES        | ThisRFC   |
-   +-----------+-------------+----------------+------------+-----------+
-   | 4         | SPI LSB     | esp_spi_lsb    | YES        | ThisRFC   |
-   +-----------+-------------+----------------+------------+-----------+
-   | 5         | SN LSB      | esp_spi_sn     | YES        | ThisRFC   |
-   +-----------+-------------+----------------+------------+-----------+
-   | 6 -       | unallocated | -              | -          | -         |
-   | 2^16-2    |             |                |            |           |
-   +-----------+-------------+----------------+------------+-----------+
+   +===========+=============+================+===========+===========+
+   | AfRG Code | Full Name   | Designation    | Attribute | Reference |
+   | Point     |             |                | Format    |           |
+   +===========+=============+================+===========+===========+
+   | 0         | DSCP CDA    | dscp_cda       | 1         | ThisRFC   |
+   +-----------+-------------+----------------+-----------+-----------+
+   | 1         | ECN CDA     | ecn_cda        | 1         | ThisRFC   |
+   +-----------+-------------+----------------+-----------+-----------+
+   | 2         | Flow Label  | flow_label_cda | 1         | ThisRFC   |
+   |           | CDA         |                |           |           |
+   +-----------+-------------+----------------+-----------+-----------+
+   | 3         | Alignment   | alignment      | 1         | ThisRFC   |
+   +-----------+-------------+----------------+-----------+-----------+
+   | 4         | SPI LSB     | esp_spi_lsb    | 1         | ThisRFC   |
+   +-----------+-------------+----------------+-----------+-----------+
+   | 5         | SN LSB      | esp_spi_sn     | 1         | ThisRFC   |
+   +-----------+-------------+----------------+-----------+-----------+
+   | 6 -       | unallocated | -              | -         | -         |
+   | 2^16-2    |             |                |           |           |
+   +-----------+-------------+----------------+-----------+-----------+
 
-                                  Table 3
+                                 Table 3
 
 8.5.  Registries for the Values of Diet-ESP Attributes for Rules
       Generation
@@ -557,9 +612,10 @@ Internet-Draft                EHC extension                November 2024
 
 
 
-Migault, et al.            Expires 25 May 2025                 [Page 10]
+
+Migault, et al.           Expires 25 July 2025                 [Page 11]
 
-Internet-Draft                EHC extension                November 2024
+Internet-Draft                EHC extension                 January 2025
 
 
 8.5.2.  ECN CDA Value Registry
@@ -613,9 +669,9 @@ Internet-Draft                EHC extension                November 2024
 
 
 
-Migault, et al.            Expires 25 May 2025                 [Page 11]
+Migault, et al.           Expires 25 July 2025                 [Page 12]
 
-Internet-Draft                EHC extension                November 2024
+Internet-Draft                EHC extension                 January 2025
 
 
                                   Table 7
@@ -632,17 +688,21 @@ Internet-Draft                EHC extension                November 2024
 10.  Normative References
 
    [I-D.ietf-ipsecme-diet-esp]
-              Migault, D., Hatami, M., Cespedes, S., Atwood, J. W., Liu,
-              D., Guggemos, T., Bormann, C., and D. Schinazi, "ESP
-              Header Compression Profile", Work in Progress, Internet-
-              Draft, draft-ietf-ipsecme-diet-esp-02, 21 October 2024,
+              Migault, D., Hatami, M., Cespedes, S., Atwood, J. W.,
+              Guggemos, T., Bormann, C., and D. Schinazi, "ESP Header
+              Compression Profile", Work in Progress, Internet-Draft,
+              draft-ietf-ipsecme-diet-esp-03, 24 November 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-ipsecme-
-              diet-esp-02>.
+              diet-esp-03>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC4301]  Kent, S. and K. Seo, "Security Architecture for the
+              Internet Protocol", RFC 4301, DOI 10.17487/RFC4301,
+              December 2005, <https://www.rfc-editor.org/info/rfc4301>.
 
    [RFC7296]  Kaufman, C., Hoffman, P., Nir, Y., Eronen, P., and T.
               Kivinen, "Internet Key Exchange Protocol Version 2
@@ -662,16 +722,15 @@ Authors' Addresses
 
    Tobias Guggemos
    LMU
-   Email: guggemos@nm.ifi.lmu.de
 
 
 
-
-
-
-Migault, et al.            Expires 25 May 2025                 [Page 12]
+Migault, et al.           Expires 25 July 2025                 [Page 13]
 
-Internet-Draft                EHC extension                November 2024
+Internet-Draft                EHC extension                 January 2025
+
+
+   Email: guggemos@nm.ifi.lmu.de
 
 
    David Schinazi
@@ -722,7 +781,4 @@ Internet-Draft                EHC extension                November 2024
 
 
 
-
-
-
-Migault, et al.            Expires 25 May 2025                 [Page 13]
+Migault, et al.           Expires 25 July 2025                 [Page 14]
