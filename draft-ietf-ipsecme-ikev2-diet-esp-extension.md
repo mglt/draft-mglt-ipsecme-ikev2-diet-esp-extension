@@ -1,8 +1,7 @@
 ---
-
 title: Internet Key Exchange version 2 (IKEv2) extension for Header Compression Profile (HCP) 
 abbrev: EHC extension
-docname: draft-ietf-ipsecme-ikev2-diet-esp-extension-02
+docname: draft-ietf-ipsecme-ikev2-diet-esp-extension-03
 ipr: trust200902
 area: Security
 wg: IPsecme
@@ -16,46 +15,46 @@ pi:
   symrefs: yes
 
 author:
-      -
-        ins: D. Migault
-        name: Daniel Migault
-        org: Ericsson
-        email: daniel.migault@ericsson.com
-      -
-        ins: T. Guggemos
-        name: Tobias Guggemos
-        org: LMU
-        email: guggemos@nm.ifi.lmu.de
-      -
-        ins:  D. Schinazi
-        name:  David Schinazi
-        org: Google LLC
-        email: dschinazi.ietf@gmail.com
-      -
-        ins: W. Atwood
-        name: J. William Atwood
-        org: Concordia University
-        email: william.atwood@concordia.ca
-      -
-        ins: D. Liu
-        name: Daiying Liu
-        org: Ericsson
-        email: harold.liu@ericsson.com
-      -
-        ins: S. Preda
-        name: Stere Preda
-        org: Ericsson
-        email: stere.preda@ericsson.com
-      -
-        ins: M. Hatami
-        name: Maryam Hatami
-        org: Concordia University
-        email: maryam.hatami@mail.concordia.ca
-      -
-        ins: S. Céspedes
-        name: Sandra Céspedes
-        org: Concordia University
-        email: sandra.cespedes@concordia.ca
+  -
+    ins: D. Migault
+    name: Daniel Migault
+    org: Ericsson
+    email: daniel.migault@ericsson.com
+  -
+    ins: T. Guggemos
+    name: Tobias Guggemos
+    org: LMU
+    email: guggemos@nm.ifi.lmu.de
+  -
+    ins:  D. Schinazi
+    name:  David Schinazi
+    org: Google LLC
+    email: dschinazi.ietf@gmail.com
+  -
+    ins: W. Atwood
+    name: J. William Atwood
+    org: Concordia University
+    email: william.atwood@concordia.ca
+  -
+    ins: D. Liu
+    name: Daiying Liu
+    org: Ericsson
+    email: harold.liu@ericsson.com
+  -
+    ins: S. Preda
+    name: Stere Preda
+    org: Ericsson
+    email: stere.preda@ericsson.com
+  -
+    ins: M. Hatami
+    name: Maryam Hatami
+    org: Concordia University
+    email: maryam.hatami@mail.concordia.ca
+  -
+    ins: S. Céspedes
+    name: Sandra Céspedes
+    org: Concordia University
+    email: sandra.cespedes@concordia.ca
 
 
 
@@ -122,9 +121,10 @@ HDR, SK {IDi, AUTH,
 
 # HCP_PROPOSAL Notify Payload
 
-{{fig-notify}} describes the HCP_PROPOSAL Notify Payload. 
+{{fig-notify}} describes the HCP_PROPOSAL Notify Payload.
 
-~~~ 
+
+~~~
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 | Next Payload  |C|  RESERVED   |         Payload Length        |
@@ -200,7 +200,7 @@ This specification defines range_afrg_proposal as a Generic Attribute for Rules 
 
 To avoid ambiguity, it is explicitly required that both AfRG_min and AfRG_max refer to the same type of parameter and that they are processed as attributes with values defining the minimum and maximum of the range. This ensures consistent interpretation during negotiation and compression.
 
-The figure below illustrates a Proposal for a compressed SPI between 6 and 8 bit long. SPI are compressed by sending LSB, so in our case AfRG_min is an esp_spi_lsb AfRG set to 6 and AfRG_max is a esp_spi_lsb set to 8.  The esp_spi_lsb AfRG is detailled in the Diet-ESP EHCP {{sec-diet-esp-ehcp}} and is a 2 byte length Attribute. The resulting range proposal i sexpressed via the combination of the range_afrg_proposal and AfRG_min and AfRG_max.
+The figure below illustrates a Proposal for a compressed SPI between 6 and 8 bit long. SPI are compressed by sending LSB, so in our case AfRG_min is an esp_spi_lsb AfRG set to 6 and AfRG_max is a esp_spi_lsb set to 8.  The esp_spi_lsb AfRG is detailed in the Diet-ESP EHCP {{sec-diet-esp-ehcp}} and is a 2 byte length Attribute. The resulting range proposal is expressed via the combination of the range_afrg_proposal and AfRG_min and AfRG_max. 
 
 ~~~
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -251,7 +251,7 @@ Flow Label  Compression/Decompression Action (CDA)
 * Attribute Value: Flow Label CDA takes discrete values coded over one byte as described in the Flow Label CDA Value Registry ({{tab:fl_cda}} in {{sec:fl_cda}})
 * Default Value: the default value is set to "uncompress" 
 
-OS or Network Bit Alignment
+ESP Byte Alignment
 
 * Designation: alignment
 * Attribute Format: 1
@@ -279,7 +279,7 @@ Sequence Number (SN) Least Significant Bits (LSB)
 
 ## Registration of IKEv2 Notify Message Types 
 
-IANA has allocated two values in the "IKEv2 Notify Message Types - Status Types" registry:
+IANA has allocated one value in the "IKEv2 Notify Message Types - Status Types" registry:
 
 ~~~
   Value    Notify Messages - Status Types
@@ -366,7 +366,7 @@ Value      | Designation | Reference |
   4-255    | unallocated |    -      |
 {: #tab:fl_cda}
 
-### OS or Network Byte Alignment {#sec:align}
+### ESP Byte Alignment {#sec:align}
 
 Value      | Designation | Reference | 
 -----------|-------------|-----------|

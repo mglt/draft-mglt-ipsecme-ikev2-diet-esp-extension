@@ -5,7 +5,7 @@
 IPsecme                                                       D. Migault
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                             T. Guggemos
-Expires: 25 July 2025                                                LMU
+Expires: 27 July 2025                                                LMU
                                                              D. Schinazi
                                                               Google LLC
                                                                W. Atwood
@@ -16,12 +16,12 @@ Expires: 25 July 2025                                                LMU
                                                                M. Hatami
                                                              S. Céspedes
                                                     Concordia University
-                                                         21 January 2025
+                                                         23 January 2025
 
 
 Internet Key Exchange version 2 (IKEv2) extension for Header Compression
                              Profile (HCP)
-             draft-ietf-ipsecme-ikev2-diet-esp-extension-02
+             draft-ietf-ipsecme-ikev2-diet-esp-extension-03
 
 Abstract
 
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 July 2025.
+   This Internet-Draft will expire on 27 July 2025.
 
 
 
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Migault, et al.           Expires 25 July 2025                  [Page 1]
+Migault, et al.           Expires 27 July 2025                  [Page 1]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -92,7 +92,7 @@ Table of Contents
        8.5.1.  DSCP CDA Value Registry . . . . . . . . . . . . . . .  11
        8.5.2.  ECN CDA Value Registry  . . . . . . . . . . . . . . .  12
        8.5.3.  Flow Label CDA Value Registry . . . . . . . . . . . .  12
-       8.5.4.  OS or Network Byte Alignment  . . . . . . . . . . . .  12
+       8.5.4.  ESP Byte Alignment  . . . . . . . . . . . . . . . . .  12
    9.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
    10. Normative References  . . . . . . . . . . . . . . . . . . . .  13
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Migault, et al.           Expires 25 July 2025                  [Page 2]
+Migault, et al.           Expires 27 July 2025                  [Page 2]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -165,7 +165,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 25 July 2025                  [Page 3]
+Migault, et al.           Expires 27 July 2025                  [Page 3]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -221,7 +221,7 @@ HDR, SK {IDi, AUTH,
 
 
 
-Migault, et al.           Expires 25 July 2025                  [Page 4]
+Migault, et al.           Expires 27 July 2025                  [Page 4]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -277,7 +277,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 25 July 2025                  [Page 5]
+Migault, et al.           Expires 27 July 2025                  [Page 5]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -322,9 +322,9 @@ Internet-Draft                EHC extension                 January 2025
    The figure below illustrates a Proposal for a compressed SPI between
    6 and 8 bit long.  SPI are compressed by sending LSB, so in our case
    AfRG_min is an esp_spi_lsb AfRG set to 6 and AfRG_max is a
-   esp_spi_lsb set to 8.  The esp_spi_lsb AfRG is detailled in the Diet-
+   esp_spi_lsb set to 8.  The esp_spi_lsb AfRG is detailed in the Diet-
    ESP EHCP Section 7 and is a 2 byte length Attribute.  The resulting
-   range proposal i sexpressed via the combination of the
+   range proposal is expressed via the combination of the
    range_afrg_proposal and AfRG_min and AfRG_max.
 
 
@@ -333,7 +333,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 25 July 2025                  [Page 6]
+Migault, et al.           Expires 27 July 2025                  [Page 6]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -389,7 +389,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 25 July 2025                  [Page 7]
+Migault, et al.           Expires 27 July 2025                  [Page 7]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -412,7 +412,7 @@ Internet-Draft                EHC extension                 January 2025
 
    *  Default Value: the default value is set to "uncompress"
 
-   OS or Network Bit Alignment
+   ESP Byte Alignment
 
    *  Designation: alignment
 
@@ -445,7 +445,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 25 July 2025                  [Page 8]
+Migault, et al.           Expires 27 July 2025                  [Page 8]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -466,7 +466,7 @@ Internet-Draft                EHC extension                 January 2025
 
 8.1.  Registration of IKEv2 Notify Message Types
 
-   IANA has allocated two values in the "IKEv2 Notify Message Types -
+   IANA has allocated one value in the "IKEv2 Notify Message Types -
    Status Types" registry:
 
      Value    Notify Messages - Status Types
@@ -501,7 +501,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 25 July 2025                  [Page 9]
+Migault, et al.           Expires 27 July 2025                  [Page 9]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -557,7 +557,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 25 July 2025                 [Page 10]
+Migault, et al.           Expires 27 July 2025                 [Page 10]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -613,7 +613,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 25 July 2025                 [Page 11]
+Migault, et al.           Expires 27 July 2025                 [Page 11]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -650,7 +650,7 @@ Internet-Draft                EHC extension                 January 2025
 
                                   Table 6
 
-8.5.4.  OS or Network Byte Alignment
+8.5.4.  ESP Byte Alignment
 
                     +=======+=============+===========+
                     | Value | Designation | Reference |
@@ -669,7 +669,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 25 July 2025                 [Page 12]
+Migault, et al.           Expires 27 July 2025                 [Page 12]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -725,7 +725,7 @@ Authors' Addresses
 
 
 
-Migault, et al.           Expires 25 July 2025                 [Page 13]
+Migault, et al.           Expires 27 July 2025                 [Page 13]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -781,4 +781,4 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 25 July 2025                 [Page 14]
+Migault, et al.           Expires 27 July 2025                 [Page 14]
