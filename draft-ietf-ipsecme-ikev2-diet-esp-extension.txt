@@ -5,7 +5,7 @@
 IPsecme                                                       D. Migault
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                             T. Guggemos
-Expires: 27 July 2025                                                LMU
+Expires: 30 July 2025                                                LMU
                                                              D. Schinazi
                                                               Google LLC
                                                                W. Atwood
@@ -16,7 +16,7 @@ Expires: 27 July 2025                                                LMU
                                                                M. Hatami
                                                              S. Céspedes
                                                     Concordia University
-                                                         23 January 2025
+                                                         26 January 2025
 
 
 Internet Key Exchange version 2 (IKEv2) extension for Header Compression
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 July 2025.
+   This Internet-Draft will expire on 30 July 2025.
 
 
 
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Migault, et al.           Expires 27 July 2025                  [Page 1]
+Migault, et al.           Expires 30 July 2025                  [Page 1]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Migault, et al.           Expires 27 July 2025                  [Page 2]
+Migault, et al.           Expires 30 July 2025                  [Page 2]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -165,7 +165,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 27 July 2025                  [Page 3]
+Migault, et al.           Expires 30 July 2025                  [Page 3]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -221,7 +221,7 @@ HDR, SK {IDi, AUTH,
 
 
 
-Migault, et al.           Expires 27 July 2025                  [Page 4]
+Migault, et al.           Expires 30 July 2025                  [Page 4]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -277,7 +277,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 27 July 2025                  [Page 5]
+Migault, et al.           Expires 30 July 2025                  [Page 5]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -333,7 +333,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 27 July 2025                  [Page 6]
+Migault, et al.           Expires 30 July 2025                  [Page 6]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -389,7 +389,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 27 July 2025                  [Page 7]
+Migault, et al.           Expires 30 July 2025                  [Page 7]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -445,7 +445,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 27 July 2025                  [Page 8]
+Migault, et al.           Expires 30 July 2025                  [Page 8]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -501,7 +501,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 27 July 2025                  [Page 9]
+Migault, et al.           Expires 30 July 2025                  [Page 9]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -557,7 +557,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 27 July 2025                 [Page 10]
+Migault, et al.           Expires 30 July 2025                 [Page 10]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -613,7 +613,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 27 July 2025                 [Page 11]
+Migault, et al.           Expires 30 July 2025                 [Page 11]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -669,7 +669,7 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 27 July 2025                 [Page 12]
+Migault, et al.           Expires 30 July 2025                 [Page 12]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -725,7 +725,7 @@ Authors' Addresses
 
 
 
-Migault, et al.           Expires 27 July 2025                 [Page 13]
+Migault, et al.           Expires 30 July 2025                 [Page 13]
 
 Internet-Draft                EHC extension                 January 2025
 
@@ -781,4 +781,4 @@ Internet-Draft                EHC extension                 January 2025
 
 
 
-Migault, et al.           Expires 27 July 2025                 [Page 14]
+Migault, et al.           Expires 30 July 2025                 [Page 14]
