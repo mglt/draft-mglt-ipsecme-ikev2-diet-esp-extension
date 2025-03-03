@@ -1,7 +1,7 @@
 ---
 title: Internet Key Exchange version 2 (IKEv2) extension for Header Compression Profile (HCP) 
 abbrev: EHC extension
-docname: draft-ietf-ipsecme-ikev2-diet-esp-extension-03
+docname: draft-ietf-ipsecme-ikev2-diet-esp-extension-04
 ipr: trust200902
 area: Security
 wg: IPsecme
@@ -15,46 +15,46 @@ pi:
   symrefs: yes
 
 author:
-  -
-    ins: D. Migault
-    name: Daniel Migault
-    org: Ericsson
-    email: daniel.migault@ericsson.com
-  -
-    ins: T. Guggemos
-    name: Tobias Guggemos
-    org: LMU
-    email: guggemos@nm.ifi.lmu.de
-  -
-    ins:  D. Schinazi
-    name:  David Schinazi
-    org: Google LLC
-    email: dschinazi.ietf@gmail.com
-  -
-    ins: W. Atwood
-    name: J. William Atwood
-    org: Concordia University
-    email: william.atwood@concordia.ca
-  -
-    ins: D. Liu
-    name: Daiying Liu
-    org: Ericsson
-    email: harold.liu@ericsson.com
-  -
-    ins: S. Preda
-    name: Stere Preda
-    org: Ericsson
-    email: stere.preda@ericsson.com
-  -
-    ins: M. Hatami
-    name: Maryam Hatami
-    org: Concordia University
-    email: maryam.hatami@mail.concordia.ca
-  -
-    ins: S. Céspedes
-    name: Sandra Céspedes
-    org: Concordia University
-    email: sandra.cespedes@concordia.ca
+    -
+      ins: D. Migault
+      name: Daniel Migault
+      org: Ericsson
+      email: daniel.migault@ericsson.com
+    -
+      ins: M. Hatami
+      name: Maryam Hatami
+      org: Concordia University
+      email: maryam.hatami@mail.concordia.ca
+    -
+      ins: D. Liu
+      name: Daiying Liu
+      org: Ericsson
+      email: harold.liu@ericsson.com
+    -
+      ins: S. Preda
+      name: Stere Preda
+      org: Ericsson
+      email: stere.preda@ericsson.com
+    -
+      ins: W. Atwood
+      name: J. William Atwood
+      org: Concordia University
+      email: william.atwood@concordia.ca
+    -
+      ins: S. Céspedes
+      name: Sandra Céspedes
+      org: Concordia University
+      email: sandra.cespedes@concordia.ca
+    -
+      ins: T. Guggemos
+      name: Tobias Guggemos
+      org: LMU
+      email: guggemos@nm.ifi.lmu.de
+    -
+      ins:  D. Schinazi
+      name:  David Schinazi
+      org: Google LLC
+      email: dschinazi.ietf@gmail.com
 
 
 
@@ -78,8 +78,7 @@ The ESP Header Compression Profile (EHCP) {{!I-D.ietf-ipsecme-diet-esp}} minimiz
 
 As illustrated in {{fig-overview}}, an initiator intending to utilize the Header Compression Profile (HCP) informs its peer by sending a HCP_PROPOSAL Notify Payload during the IKE_AUTH and CREATE_CHILD_SA exchanges. The HCP_PROPOSAL includes a list of Proposals, each comprising an EHCP Name along with a set of Attributes for Rules Generation (AfRG){{!I-D.ietf-ipsecme-diet-esp}}. Any AfRG for which the initiator wishes to specify no limitations SHOULD be excluded, i.e., an AfRG is only sent if the sending peer wants the receiving peer to select a subset of the available values. A given AfRG MAY be repeated with different values in order to provide a list of acceptable values. A range of possible AfRG values MAY be indicated as well.
 
-If a Proposal contains an unknown HCP Name, or any AfRG in a Proposal is unknown, then the entire Proposal must be discarded by the responder. If none of the received Proposals are deemed acceptable, the responder MAY choose to discard the HCP_PROPOSAL Notify Payload. Nevertheless, it is anticipated that the responder will provide an explanation for rejecting all HCP Proposals. If the reason pertains to an AfRG with an unacceptable value, the responder SHOULD reply with a
-NO_PROPOSAL_CHOSEN Notify Payload.
+If a Proposal contains an unknown HCP Name, or any AfRG in a Proposal is unknown, then the entire Proposal must be discarded by the responder. If none of the received Proposals are deemed acceptable, the responder MAY choose to discard the HCP_PROPOSAL Notify Payload. Nevertheless, it is anticipated that the responder will provide an explanation for rejecting all HCP Proposals. If the reason pertains to an AfRG with an unacceptable value, the responder SHOULD reply with a NO_PROPOSAL_CHOSEN Notify Payload.
 
 Conversely, if the receiver identifies a suitable Proposal, it will respond with an HCP_PROPOSAL Notify Payload that includes the chosen Proposal. In cases where the AfRG was not explicitly stated, the responder will provide the AfRG unless it defaults to a standard value. Each AfRG MUST NOT be mentioned more than one time. When multiple values are provided for a specific AfRG (either multiple values being provided or via a range of acceptable values), the responder MUST NOT provide more than one value. The Proposal MUST NOT contain any range of AfRG.
 
@@ -235,21 +234,21 @@ DSCP Compression/Decompression Action (CDA)
 * Designation: dscp_cda
 * Attribute Format: 1
 * Attribute Value: DSCP CDA takes discrete values coded over one byte as described in DSCP CDA Value Registry  ({{tab:dscp_cda}} in {{sec:dscp_cda}})
-* Default Value: the default value is set to "uncompress" 
+* Default Value: the default value is set to "not_compressed" 
 
 ECN Compression/Decompression Action (CDA)
 
 * Designation: ecn_cda
 * Attribute Format: 1
 * Attribute Value: ECN CDA takes discrete values coded over one byte as described in the ECN CDA Value Registry ({{tab:ecn_cda}} in {{sec:ecn_cda}})
-* Default Value: the default value is set to "uncompress" 
+* Default Value: the default value is set to "not_compressed" 
 
 Flow Label  Compression/Decompression Action (CDA)
 
 * Designation: flow_label_cda
 * Attribute Format: 1
 * Attribute Value: Flow Label CDA takes discrete values coded over one byte as described in the Flow Label CDA Value Registry ({{tab:fl_cda}} in {{sec:fl_cda}})
-* Default Value: the default value is set to "uncompress" 
+* Default Value: the default value is set to "not_compressed" 
 
 ESP Byte Alignment
 
@@ -257,6 +256,13 @@ ESP Byte Alignment
 * Attribute Format: 1
 * Attribute Value: Byte Alignment takes discrete values coded over one byte as described in the Bit Alignment Value Registry ({{tab:align}} in {{sec:align}})
 * Default Value: the default value is set to "64 bit", which corresponds to the standard IPv6 bit alignment. The default value of 64 bit in this specification refers to the bit alignment used for Diet-ESP compression operations and does not override or contradict the alignment requirements of RFC 4303. Instead, the alignment specified here ensures compatibility with the SCHC compression framework, which is designed to operate efficiently in constrained networks.
+
+ESP Trailer 
+
+* Designation: esp_trailer
+* Attribute Format: 1
+* Attribute Value: ESP Trailer takes discrete values coded over one byte as described in the Bit Alignment Value Registry ({{tab:esp_trailer}} in {{sec:esp_trailer}})
+* Default Value: the default value is set to "Optional", which enable the ESP Trailer to be compressed. 
 
 Security Parameter Index (SPI) Least Significant Bits (LSB)
 
@@ -299,9 +305,9 @@ All registries are "Specification Required".
 Registry for Generic Attributes for Rules Generation. When Associated Data is set to YES, the AF bit of the corresponding Transform Attribute Payload is set to 0; otherwise it is set to 1. The AfRG Code Point mentioned here MUST NOT be reused by any Registries associated with any Profile and is shared by all profiles.
 
 
-|  AfRG Code Point | Full Name      |  Designation     | Attribute Format | Reference
-|------------------|----------------|------------------|---------------------|----------
-|  65535           | RANGE AfRG     | range_afrg_proposal       | 0                 | ThisRFC
+|  AfRG Code Point | Full Name      |  Designation              | Attribute Format | Reference
+|------------------|----------------|---------------------------|------------------|----------
+|  65535           | RANGE AfRG     | range_afrg_proposal       | 0                | ThisRFC
 {: #tab:gen-afrg}
 
 Each entry in the range is represented by two attributes (AfRG_min and AfRG_max), both following the 2-byte Attribute Type format specified in {{!RFC7296}}. This ensures clarity and compatibility in all implementations.
@@ -329,7 +335,7 @@ The Diet-ESP Attributes for Rules Generation registry specifies six AfRG paramet
 |  3               | Alignment      | alignment        | 1                 | ThisRFC 
 |  4               | SPI LSB        | esp_spi_lsb      | 1                 | ThisRFC 
 |  5               | SN  LSB        | esp_spi_sn       | 1                 | ThisRFC 
-|  6 - 2^16-2      | unallocated    |     -            |        -            |    -    
+|  6 - 2^16-2      | unallocated    |     -            |        -          |    -    
 {: #tab:afrg}
 
 
@@ -338,32 +344,32 @@ The Diet-ESP Attributes for Rules Generation registry specifies six AfRG paramet
 
 ### DSCP CDA Value Registry  {#sec:dscp_cda}
 
-Value      | Designation | Reference | 
------------|-------------|-----------|
-  0        | uncompress  | ThisRFC   |
-  1        | lower       | ThisRFC   |
-  2        | sa          | ThisRFC   | 
-  3-255    | unallocated |    -      |
+Value      |   Designation   | Reference | 
+-----------|-----------------|-----------|
+  0        | not_compressed  | ThisRFC   |
+  1        | lower           | ThisRFC   |
+  2        | sa              | ThisRFC   | 
+  3-255    | unallocated     |    -      |
 {: #tab:dscp_cda}
 
 ### ECN CDA Value Registry {#sec:ecn_cda}
 
-Value      | Designation | Reference | 
------------|-------------|-----------|
-  0        | uncompress  | ThisRFC   |
-  1        | lower       | ThisRFC   |
-  2-255    | unallocated |    -      |
+Value      |   Designation   | Reference | 
+-----------|-----------------|-----------|
+  0        | not_compressed  | ThisRFC   |
+  1        | lower           | ThisRFC   |
+  2-255    | unallocated     |    -      |
 {: #tab:ecn_cda}
 
 ### Flow Label CDA Value Registry {#sec:fl_cda}
  
-Value      | Designation | Reference | 
------------|-------------|-----------|
-  0        | uncompress  | ThisRFC   |
-  1        | lower       | ThisRFC   |
-  2        | generated   | ThisRFC   |
-  3        | zero        | ThisRFC   |
-  4-255    | unallocated |    -      |
+Value      |   Designation   | Reference | 
+-----------|-----------------|-----------|
+  0        | not_compressed  | ThisRFC   |
+  1        | lower           | ThisRFC   |
+  2        | generated       | ThisRFC   |
+  3        | zero            | ThisRFC   |
+  4-255    | unallocated     |    -      |
 {: #tab:fl_cda}
 
 ### ESP Byte Alignment {#sec:align}
@@ -377,6 +383,16 @@ Value      | Designation | Reference |
   4-255    | unallocated |    -      |
 {: #tab:align}
 
+
+## ESP Trailer {#sec:esp_trailer}
+
+Value      | Designation | Reference | 
+-----------|-------------|-----------|
+  0        | Mandatory   | ThisRFC   |
+  1        | Optional    | ThisRFC   |
+  2-255    | unallocated |    -      |
+{: #tab:esp_trailer}
+
 # Security Considerations
 
 The protocol defined in this document does not modify IKEv2. 
@@ -384,4 +400,7 @@ The protocol defined in this document does not modify IKEv2.
 Proposals may be expressed in various ways and a proposal may be expressed in a specific way so that its treatment overloads the receiver. The receiver needs to consider aborting the exchange when too much resource is required.
 
 
+# Acknowledgements
+
+The authors extend their gratitude to Samita Chakrabart, Tero Kivinen, Michael Richarson and Valery Smyslov for their long time support. The authors would like to acknowledge the support from Mitacs through the Mitacs Accelerate program.
 
